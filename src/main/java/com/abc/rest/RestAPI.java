@@ -10,21 +10,19 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 
+import com.abc.DAO.ReadDatabaseDao;
+
+import RestModels.CityModel;
 import RestModels.TestResponseModel;
 
-@Path("/testservice")
+@Path("/citiesFromDB")
 public class RestAPI {
+
 	@GET
 	@Produces("application/json")
 	public Response convertCtoF() {
-
-		Double fahrenheit;
-		Double celsius = 36.8;
-		fahrenheit = ((celsius * 9) / 5) + 32;
-		TestResponseModel res = new TestResponseModel();
-		res.setId("1");
-		res.setTempFarenh(fahrenheit);
-		return Response.ok().entity(res).build();
+		CityModel resModel = ReadDatabaseDao.readDataFromDb();
+		return Response.ok().entity(resModel).build();
 	}
 
 	@POST
@@ -38,7 +36,8 @@ public class RestAPI {
 	@Path("/tempCel/{c}/id/{id}")
 	@GET
 	@Produces("application/xml")
-	public Response convertCtoFfromInput(@PathParam("c") @Min(10) Double c, @PathParam("id") @Size(max=10) String id) {
+	public Response convertCtoFfromInput(@PathParam("c") @Min(10) Double c,
+			@PathParam("id") @Size(max = 10) String id) {
 		Double fahrenheit;
 		Double celsius = c;
 		fahrenheit = ((celsius * 9) / 5) + 32;
